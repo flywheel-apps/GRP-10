@@ -2,7 +2,7 @@
 	"name": "search-query-to-text",
 	"label": "Search Query to Text File",
 	"description": "This is an SDK gear (ANALYSIS), which, provided with a flyql string (as a configuration parameter), performs a FlyQL query and writes the results out to a file (type configurable).",
-	"version": "0.0.0",
+	"version": "0.0.2",
 	"inputs": {
 		"api-key": {
 			"base": "api-key"

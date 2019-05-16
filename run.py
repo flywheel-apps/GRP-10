@@ -90,9 +90,15 @@ if __name__ == '__main__':
         print("No search results - exiting...")
         os.sys.exit(1)
 
-    column_list = get_keys(search[0].to_dict())
-
-
+    try:
+        column_config_filepath = config['inputs']['column_config']['location']['path']
+        with open(column_config_filepath) as config_data:
+            column_config = json.load(config_data)
+        column_list = column_config[return_type]
+        for item in column_list:
+            print(item)
+    except KeyError:
+        column_list = get_keys(search[0].to_dict())
     search = filter_search(search, column_list)
     if file_name == "":
         file_name = return_type
