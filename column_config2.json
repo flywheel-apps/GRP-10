@@ -12,8 +12,7 @@
     "subject.code",
     "file",
     "collection",
-    "analysis",
-    "parent"
+    "analysis"
   ],
   "acquisition": [
     "return_type",
@@ -32,8 +31,7 @@
     "subject.code",
     "file",
     "collection",
-    "analysis",
-    "parent"
+    "analysis"
   ],
   "analysis": [
     "return_type",
@@ -52,8 +50,8 @@
     "analysis.id",
     "analysis.label",
     "analysis.user",
-    "analysis.created",
-    "parent"
+    "analysis.created"
+
   ],
   "file": [
     "return_type",
@@ -72,24 +70,6 @@
     "file.name",
     "file.size",
     "collection",
-    "analysis",
-    "parent.public",
-    "parent.label",
-    "parent.info",
-    "parent.session",
-    "parent.uid",
-    "parent.timestamp",
-    "parent.timezone",
-    "parent.id",
-    "parent.parents",
-    "parent.collections",
-    "parent.files",
-    "parent.created",
-    "parent.modified",
-    "parent.info_exists",
-    "parent.permissions",
-    "parent.notes",
-    "parent.tags",
-    "parent.analyses"
+    "analysis"
   ]
 }

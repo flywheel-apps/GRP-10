@@ -8,6 +8,7 @@ import pandas as pd
 import flywheel
 import datetime
 
+
 def search_with_query(return_type, query):
     search = fw.search({'return_type': return_type, 'structured_query': query}, size=10000)
     return search
@@ -31,9 +32,10 @@ def search_to_json(search, filepath):
     with open(json_path, 'w') as outfile:
         json.dump(search, outfile, separators=(', ', ': '), sort_keys=True, indent=4)
 
+
 def get_keys(d, keystring=''):
     key_list = []
-    for k,v in d.items():
+    for k, v in d.items():
         if isinstance(v, dict):
             newkeystring = keystring + k + '.'
             key_list += get_keys(v, newkeystring)
@@ -56,9 +58,11 @@ def filter_search(search, column_list):
             try:
                 result_dict[column] = eval("result.{}".format(column))
             except AttributeError:
-                result_dict[column] = ""
-            if type(result_dict[column])==datetime.datetime:
+                result_dict[column] = None
+            if type(result_dict[column]) not in [str, int, float]:
+
                 result_dict[column] = str(result_dict[column])
+
         filtered_search.append(result_dict)
     return filtered_search
 
@@ -75,34 +79,37 @@ if __name__ == '__main__':
     with open(config_file_path) as config_data:
         config = json.load(config_data)
     # Set config options
-    for key, value in config['config'].items():
-        exec(key + " = value")
-    if return_type not in ['session', 'analysis', 'file', 'acquisition']:
-        os.sys.exit(1)
-    output_file_path = os.path.join(output_folder, return_type)
+    config_options = config['config']
     # Get API key
     api_key = config['inputs']['api-key']['key']
-    # Create client
-    fw = flywheel.Client(api_key)
 
-    search = search_with_query(return_type, query)
-    if len(search) == 0:
-        print("No search results - exiting...")
-        os.sys.exit(1)
+    for return_type in ['session', 'acquisition', 'analysis', 'file']:
+        print("searching {}".format(return_type))
+        search_key = return_type + "_search"
+        if config_options[search_key]:
+            output_file_path = os.path.join(output_folder, return_type)
 
-    try:
-        column_config_filepath = config['inputs']['column_config']['location']['path']
-        with open(column_config_filepath) as config_data:
-            column_config = json.load(config_data)
-        column_list = column_config[return_type]
-        for item in column_list:
-            print(item)
-    except KeyError:
-        column_list = get_keys(search[0].to_dict())
-    search = filter_search(search, column_list)
-    if file_name == "":
-        file_name = return_type
-    if create_csv_file:
-        search_to_csv(search, output_file_path)
-    if create_json_file:
-        search_to_json(search, output_file_path)
+            # Create client
+            fw = flywheel.Client(api_key)
+
+            search = search_with_query(return_type, config_options["query"])
+            if len(search) == 0:
+                print("No search results - exiting...")
+                os.sys.exit(1)
+
+            try:
+                column_config_filepath = config['inputs']['column_config']['location']['path']
+                with open(column_config_filepath) as config_data:
+                    column_config = json.load(config_data)
+                column_list = column_config[return_type]
+            except KeyError:
+                column_list = get_keys(search[0].to_dict())
+            search = filter_search(search, column_list)
+            print(type(search))
+            file_name = config_options['file_name'] + return_type
+            if config_options['create_csv_file']:
+                search_to_csv(search, output_file_path)
+            if config_options['create_json_file']:
+                search_to_json(search, output_file_path)
+        else:
+            print('Skipping {}...'.format(return_type))

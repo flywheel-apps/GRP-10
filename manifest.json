@@ -21,7 +21,7 @@
 	"config": {
 		"file_name": {
 			"default": "",
-			"description": "name of output text file",
+			"description": "name prefix of output text file",
 			"type": "string"
 		},
 		"create_json_file": {
@@ -34,10 +34,25 @@
 			"description": "whether to create a csv file [default = true]",
 			"type": "boolean"
 		},
-		"return_type": {
-			"optional": false,
-			"description": "Search return type. Must be \"session\", \"acquisition\",\"analysis\", or \"file\"",
-			"type": "string"
+		"session_search": {
+			"default": true,
+			"description": "Whether to perform search on sessions [default = true]",
+			"type": "boolean"
+		},
+		"acquisition_search": {
+			"default": true,
+			"description": "Whether to perform search on acquisitions [default = true]",
+			"type": "boolean"
+		},
+		"analysis_search": {
+			"default": true,
+			"description": "Whether to perform search on analyses [default = true]",
+			"type": "boolean"
+		},
+		"file_search": {
+			"default": true,
+			"description": "Whether to perform search on files [default = true]",
+			"type": "boolean"
 		},
 		"query": {
 			"optional": false,
