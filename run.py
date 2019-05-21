@@ -87,7 +87,11 @@ if __name__ == '__main__':
         print("searching {}".format(return_type))
         search_key = return_type + "_search"
         if config_options[search_key]:
-            output_file_path = os.path.join(output_folder, return_type)
+            if config_options['file_name'] != "":
+                file_name = config_options['file_name'] + "_" + return_type
+            else:
+                file_name = return_type
+            output_file_path = os.path.join(output_folder, file_name)
 
             # Create client
             fw = flywheel.Client(api_key)
@@ -105,7 +109,7 @@ if __name__ == '__main__':
             except KeyError:
                 column_list = get_keys(search[0].to_dict())
             search = filter_search(search, column_list)
-            print(type(search))
+
             file_name = config_options['file_name'] + return_type
             if config_options['create_csv_file']:
                 search_to_csv(search, output_file_path)
